@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  tests:
+    build: .
+    container_name: api-tests
+    volumes:
+      - ./allure-results:/app/allure-results
+      - ./logs:/app/logs
+    command: pytest tests/ -v --alluredir=allure-results
+    environment:
+      - BASE_URL=${BASE_URL}
+      - TIMEOUT=${TIMEOUT}
