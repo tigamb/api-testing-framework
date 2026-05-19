@@ -1,0 +1,168 @@
+{
+  "info": {
+    "name": "API Testing Framework",
+    "description": "Collection לבדיקות API על jsonplaceholder",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://jsonplaceholder.typicode.com"
+    }
+  ],
+  "item": [
+    {
+      "name": "Posts",
+      "item": [
+        {
+          "name": "GET כל הפוסטים",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/posts",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "name": "GET פוסט בודד",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/posts/1",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "name": "POST יצירת פוסט",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/posts",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"פוסט חדש\",\n  \"body\": \"תוכן הפוסט\",\n  \"userId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "PUT עדכון פוסט",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/posts/1",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 1,\n  \"title\": \"כותרת מעודכנת\",\n  \"body\": \"תוכן מעודכן\",\n  \"userId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "DELETE מחיקת פוסט",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/posts/1",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "GET כל המשתמשים",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/users",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "name": "GET משתמש בודד",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/users/1",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "name": "GET פוסטים של משתמש",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/users/1/posts",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "GET כל התגובות",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/comments",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "name": "GET תגובות של פוסט",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/posts/1/comments",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
