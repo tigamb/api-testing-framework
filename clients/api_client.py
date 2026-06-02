@@ -1,16 +1,25 @@
 # clients/api_client.py
 
-import requests
+import requests, os
 from config.settings import BASE_URL, HEADERS, TIMEOUT
 from config.logger import logger
 
 
 class APIClient:
 
-    def __init__(self):
-        self.base_url = BASE_URL
-        self.headers = HEADERS
+    def __init__(self, base_url=None):
+        self.base_url = base_url or BASE_URL
+        self.headers = HEADERS.copy()
         self.timeout = TIMEOUT
+    
+        reqres_api_key = os.getenv("REQRES_API_KEY")
+        if reqres_api_key:
+            self.headers["x-api-key"] = reqres_api_key
+
+
+    def set_token(self, token: str):
+        self.headers["Authorization"] = f"Bearer {token}"
+        logger.info("Token הוגדר בהצלחה")
 
     def get(self, endpoint):
         url = f"{self.base_url}{endpoint}"
