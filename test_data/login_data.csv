@@ -1,0 +1,5 @@
+email,password,expected_status,description
+eve.holt@reqres.in,cityslicka,200,התחברות תקינה
+eve.holt@reqres.in,,400,חסרה סיסמה
+,cityslicka,400,חסר אימייל
+notexist@fake.com,wrongpass,400,משתמש לא קיים
