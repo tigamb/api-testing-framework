@@ -19,7 +19,7 @@ class APIClient:
 
     def set_token(self, token: str):
         self.headers["Authorization"] = f"Bearer {token}"
-        logger.info("Token הוגדר בהצלחה")
+        logger.info("Token set successfully")
 
     def get(self, endpoint):
         url = f"{self.base_url}{endpoint}"
@@ -29,10 +29,10 @@ class APIClient:
             logger.info(f"Response: {response.status_code} | Time: {response.elapsed.total_seconds()}s")
             return response
         except requests.exceptions.Timeout:
-            logger.error(f"Timeout בבקשה ל־{url}")
+            logger.error(f"Timeout on request to {url}")
             raise
         except requests.exceptions.ConnectionError:
-            logger.error(f"בעיית חיבור לשרת: {url}")
+            logger.error(f"Connection error: {url}")
             raise
 
     def post(self, endpoint, body):
@@ -43,10 +43,10 @@ class APIClient:
             logger.info(f"Response: {response.status_code} | Time: {response.elapsed.total_seconds()}s")
             return response
         except requests.exceptions.Timeout:
-            logger.error(f"Timeout בבקשה ל־{url}")
+            logger.error(f"Timeout on request to {url}")
             raise
         except requests.exceptions.ConnectionError:
-            logger.error(f"בעיית חיבור לשרת: {url}")
+            logger.error(f"Connection error: {url}")
             raise
 
     def put(self, endpoint, body):
@@ -57,10 +57,10 @@ class APIClient:
             logger.info(f"Response: {response.status_code} | Time: {response.elapsed.total_seconds()}s")
             return response
         except requests.exceptions.Timeout:
-            logger.error(f"Timeout בבקשה ל־{url}")
+            logger.error(f"Timeout on request to {url}")
             raise
         except requests.exceptions.ConnectionError:
-            logger.error(f"בעיית חיבור לשרת: {url}")
+            logger.error(f"Connection error: {url}")
             raise
 
     def delete(self, endpoint):
@@ -71,8 +71,8 @@ class APIClient:
             logger.info(f"Response: {response.status_code} | Time: {response.elapsed.total_seconds()}s")
             return response
         except requests.exceptions.Timeout:
-            logger.error(f"Timeout בבקשה ל־{url}")
+            logger.error(f"Timeout on request to {url}")
             raise
         except requests.exceptions.ConnectionError:
-            logger.error(f"בעיית חיבור לשרת: {url}")
+            logger.error(f"Connection error: {url}")
             raise

@@ -1,8 +1,11 @@
 
 import pytest
 import allure
+from jsonschema import validate
+from utils.schemas import COMMENT_SCHEMA
 
 
+@pytest.mark.regression
 @allure.feature("Comments")
 class TestGetComments:
 
@@ -32,14 +35,9 @@ class TestGetComments:
         with allure.step("שולח GET ל־/comments"):
             response = api_client.get("/comments")
             body = response.json()
-            first_comment = body[0]
 
-        with allure.step("מוודא שכל השדות הנדרשים קיימים"):
-            assert "id" in first_comment
-            assert "postId" in first_comment
-            assert "name" in first_comment
-            assert "email" in first_comment
-            assert "body" in first_comment
+        with allure.step("מוודא שהתגובה הראשונה תואמת את ה־schema"):
+            validate(instance=body[0], schema=COMMENT_SCHEMA)
 
     @allure.title("GET תגובות של פוסט ספציפי - parametrize")
     @allure.severity(allure.severity_level.NORMAL)
@@ -72,6 +70,8 @@ class TestGetComments:
             assert "@" in body["email"]
 
 
+@pytest.mark.e2e
+@pytest.mark.regression
 @allure.feature("Comments - E2E Flow")
 class TestCommentsE2EFlow:
 
@@ -141,6 +141,8 @@ class TestCommentsE2EFlow:
             assert len(comments) > 0
 
 
+@pytest.mark.negative
+@pytest.mark.regression
 @allure.feature("Comments - Negative Tests")
 class TestCommentsNegative:
 

@@ -20,6 +20,7 @@ packaging==26.2
 pluggy==1.6.0
 premailer==3.10.0
 Pygments==2.20.0
+jsonschema==4.26.0
 pytest==9.0.3
 pytest-html==4.2.0
 pytest-metadata==3.1.1
@@ -28,4 +29,4 @@ requests==2.34.2
 tomli==2.4.1
 typing_extensions==4.15.0
 urllib3==2.7.0
-yagmail==0.15.293
+yagmail==0.16.0

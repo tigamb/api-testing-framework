@@ -3,7 +3,7 @@
 import pytest
 import os
 from clients.api_client import APIClient
-from config.settings import REQRES_URL
+from config.settings import REQRES_URL, SEND_EMAIL_REPORT
 from utils.email_reporter import send_test_report
 
 
@@ -32,6 +32,8 @@ def authenticated_client():
 
 
 def pytest_sessionfinish(session, exitstatus):
+    if not SEND_EMAIL_REPORT:
+        return
     report_path = "report.html"
     if os.path.exists(report_path):
         send_test_report(report_path)

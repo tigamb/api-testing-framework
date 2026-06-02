@@ -3,6 +3,8 @@ import allure
 import pytest
 
 
+@pytest.mark.smoke
+@pytest.mark.regression
 @allure.feature("Authentication")
 class TestLogin:
 
@@ -61,6 +63,7 @@ class TestLogin:
             assert "error" in body
 
 
+@pytest.mark.regression
 @allure.feature("Authentication")
 class TestRegister:
 
@@ -97,6 +100,8 @@ class TestRegister:
             assert "error" in body
 
 
+@pytest.mark.e2e
+@pytest.mark.regression
 @allure.feature("Authentication")
 class TestProtectedEndpoints:
 

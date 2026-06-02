@@ -2,12 +2,16 @@
 
 import allure
 import pytest
+from jsonschema import validate
+from utils.schemas import POST_SCHEMA
 
 
 
 
 # GET POSTS
 #=======================================================================
+@pytest.mark.smoke
+@pytest.mark.regression
 @allure.feature("Posts")
 class TestGetPosts:
 
@@ -40,18 +44,15 @@ class TestGetPosts:
             response = api_client.get("/posts")
             body = response.json()
 
-        with allure.step("מוודא שהפוסט הראשון מכיל את כל השדות הנדרשים"):
-            first_post = body[0]
-            assert "id" in first_post
-            assert "title" in first_post
-            assert "body" in first_post
-            assert "userId" in first_post
+        with allure.step("מוודא שהפוסט הראשון תואם את ה־schema"):
+            validate(instance=body[0], schema=POST_SCHEMA)
 
 
 
 
 # TESTS WITH PARAM
 #=======================================================================
+@pytest.mark.regression
 @allure.feature("Posts")
 class TestParametrized:
 
@@ -109,6 +110,8 @@ class TestParametrized:
 
 # SINGLE POST
 #=======================================================================
+@pytest.mark.smoke
+@pytest.mark.regression
 @allure.feature("Posts")
 class TestGetSinglePost:
 
@@ -151,6 +154,8 @@ class TestGetSinglePost:
 
 # CREATE POST
 #=======================================================================
+@pytest.mark.smoke
+@pytest.mark.regression
 @allure.feature("Posts")
 class TestCreatePost:
 
@@ -194,6 +199,8 @@ class TestCreatePost:
 
 # DELETE POST
 #=======================================================================
+@pytest.mark.smoke
+@pytest.mark.regression
 @allure.feature("Posts")
 class TestDeletePost:
 
@@ -221,6 +228,7 @@ class TestDeletePost:
 
 # UPADTE POST
 #=======================================================================
+@pytest.mark.regression
 @allure.feature("Posts")
 class TestUpdatePost:
 
@@ -297,6 +305,8 @@ class TestUpdatePost:
 
 # NEGATIVE TESTS
 #=======================================================================
+@pytest.mark.negative
+@pytest.mark.regression
 @allure.feature("Posts - Negative Tests")
 class TestNegativeScenarios:
 

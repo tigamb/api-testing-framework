@@ -22,6 +22,7 @@ posts_data = get_parametrize_data(
 )
 
 
+@pytest.mark.regression
 @allure.feature("Data Driven - Login")
 class TestDataDrivenLogin:
 
@@ -43,6 +44,7 @@ class TestDataDrivenLogin:
             assert response.status_code == int(expected_status)
 
 
+@pytest.mark.regression
 @allure.feature("Data Driven - Posts")
 class TestDataDrivenPosts:
 

@@ -3,14 +3,10 @@ import allure
 import pytest
 import time
 import statistics
+from config.settings import PERF_MAX_RESPONSE_TIME, PERF_ACCEPTABLE_RESPONSE_TIME, PERF_MAX_STD_DEV
 
 
-# קבועי זמן בשניות
-MAX_RESPONSE_TIME = 2.0
-ACCEPTABLE_RESPONSE_TIME = 1.0
-FAST_RESPONSE_TIME = 0.5
-
-
+@pytest.mark.performance
 @allure.feature("Performance")
 class TestResponseTimes:
 
@@ -21,14 +17,14 @@ class TestResponseTimes:
             response = api_client.get("/posts")
             elapsed = response.elapsed.total_seconds()
 
-        with allure.step(f"מוודא שזמן התגובה קטן מ־{MAX_RESPONSE_TIME} שניות"):
+        with allure.step(f"מוודא שזמן התגובה קטן מ־{PERF_MAX_RESPONSE_TIME} שניות"):
             allure.attach(
                 f"זמן תגובה: {elapsed:.3f}s",
                 name="Response Time",
                 attachment_type=allure.attachment_type.TEXT
             )
-            assert elapsed < MAX_RESPONSE_TIME, \
-                f"זמן תגובה {elapsed:.3f}s עולה על המקסימום {MAX_RESPONSE_TIME}s"
+            assert elapsed < PERF_MAX_RESPONSE_TIME, \
+                f"זמן תגובה {elapsed:.3f}s עולה על המקסימום {PERF_MAX_RESPONSE_TIME}s"
 
     @allure.title("GET פוסט בודד - זמן תגובה מהיר")
     @allure.severity(allure.severity_level.NORMAL)
@@ -37,14 +33,14 @@ class TestResponseTimes:
             response = api_client.get("/posts/1")
             elapsed = response.elapsed.total_seconds()
 
-        with allure.step(f"מוודא שזמן התגובה קטן מ־{ACCEPTABLE_RESPONSE_TIME} שניות"):
+        with allure.step(f"מוודא שזמן התגובה קטן מ־{PERF_ACCEPTABLE_RESPONSE_TIME} שניות"):
             allure.attach(
                 f"זמן תגובה: {elapsed:.3f}s",
                 name="Response Time",
                 attachment_type=allure.attachment_type.TEXT
             )
-            assert elapsed < ACCEPTABLE_RESPONSE_TIME, \
-                f"זמן תגובה {elapsed:.3f}s עולה על המקסימום {ACCEPTABLE_RESPONSE_TIME}s"
+            assert elapsed < PERF_ACCEPTABLE_RESPONSE_TIME, \
+                f"זמן תגובה {elapsed:.3f}s עולה על המקסימום {PERF_ACCEPTABLE_RESPONSE_TIME}s"
 
     @allure.title("POST יצירת פוסט - זמן תגובה תקין")
     @allure.severity(allure.severity_level.NORMAL)
@@ -58,16 +54,17 @@ class TestResponseTimes:
             response = api_client.post("/posts", new_post)
             elapsed = response.elapsed.total_seconds()
 
-        with allure.step(f"מוודא שזמן התגובה קטן מ־{MAX_RESPONSE_TIME} שניות"):
+        with allure.step(f"מוודא שזמן התגובה קטן מ־{PERF_MAX_RESPONSE_TIME} שניות"):
             allure.attach(
                 f"זמן תגובה: {elapsed:.3f}s",
                 name="Response Time",
                 attachment_type=allure.attachment_type.TEXT
             )
-            assert elapsed < MAX_RESPONSE_TIME, \
-                f"זמן תגובה {elapsed:.3f}s עולה על המקסימום {MAX_RESPONSE_TIME}s"
+            assert elapsed < PERF_MAX_RESPONSE_TIME, \
+                f"זמן תגובה {elapsed:.3f}s עולה על המקסימום {PERF_MAX_RESPONSE_TIME}s"
 
 
+@pytest.mark.performance
 @allure.feature("Performance")
 class TestMultipleRequestsPerformance:
 
@@ -95,8 +92,8 @@ class TestMultipleRequestsPerformance:
                 attachment_type=allure.attachment_type.TEXT
             )
 
-        with allure.step(f"מוודא שהממוצע קטן מ־{ACCEPTABLE_RESPONSE_TIME} שניות"):
-            assert avg_time < ACCEPTABLE_RESPONSE_TIME, \
+        with allure.step(f"מוודא שהממוצע קטן מ־{PERF_ACCEPTABLE_RESPONSE_TIME} שניות"):
+            assert avg_time < PERF_ACCEPTABLE_RESPONSE_TIME, \
                 f"ממוצע זמן תגובה {avg_time:.3f}s עולה על המקסימום"
 
     @allure.title("בדיקת עקביות - סטיית תקן זמני תגובה")
@@ -120,11 +117,12 @@ class TestMultipleRequestsPerformance:
                 attachment_type=allure.attachment_type.TEXT
             )
 
-        with allure.step("מוודא שסטיית התקן קטנה מ־0.5 שניות"):
-            assert std_dev < 0.5, \
+        with allure.step(f"מוודא שסטיית התקן קטנה מ־{PERF_MAX_STD_DEV} שניות"):
+            assert std_dev < PERF_MAX_STD_DEV, \
                 f"סטיית תקן {std_dev:.3f}s גדולה מדי — תגובות לא עקביות"
 
 
+@pytest.mark.performance
 @allure.feature("Performance")
 class TestConcurrentRequests:
 

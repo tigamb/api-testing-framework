@@ -2,8 +2,12 @@
 
 import pytest
 import allure
+from jsonschema import validate
+from utils.schemas import USER_SCHEMA
 
 
+@pytest.mark.smoke
+@pytest.mark.regression
 @allure.feature("Users")
 class TestGetUsers:
     
@@ -33,16 +37,12 @@ class TestGetUsers:
         with allure.step("שולח GET ל־/users"):
             response = api_client.get("/users")
             body = response.json()
-            first_user = body[0]
 
-        with allure.step("מוודא שכל השדות הנדרשים קיימים"):
-            assert "id" in first_user
-            assert "name" in first_user
-            assert "email" in first_user
-            assert "address" in first_user
-            assert "company" in first_user
+        with allure.step("מוודא שהמשתמש הראשון תואם את ה־schema"):
+            validate(instance=body[0], schema=USER_SCHEMA)
 
 
+@pytest.mark.regression
 @allure.feature("Users")
 class TestGetSingleUser:
 
@@ -104,6 +104,7 @@ class TestGetSingleUser:
             assert body["id"] == user_id
 
 
+@pytest.mark.regression
 @allure.feature("Users")
 class TestUserPosts:
 
@@ -141,6 +142,8 @@ class TestUserPosts:
                 assert post["userId"] == user_id
 
 
+@pytest.mark.negative
+@pytest.mark.regression
 @allure.feature("Users - Negative Tests")
 class TestUsersNegative:
 
