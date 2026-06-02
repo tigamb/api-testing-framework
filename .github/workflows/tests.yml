@@ -18,15 +18,12 @@ jobs:
         run: docker build -t api-testing .
 
       - name: Run tests in Docker
-        env:
-          REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
-          BASE_URL: ${{ secrets.BASE_URL }}
-          REQRES_URL: ${{ secrets.REQRES_URL }}
         run: |
           docker run --rm \
             -e REQRES_API_KEY=${{ secrets.REQRES_API_KEY }} \
-            -e BASE_URL=${{ secrets.BASE_URL }} \
-            -e REQRES_URL=${{ secrets.REQRES_URL }} \
+            -e BASE_URL=https://jsonplaceholder.typicode.com \
+            -e REQRES_URL=https://reqres.in/api \
+            -e TIMEOUT=10 \
             -v ${{ github.workspace }}/allure-results:/app/allure-results \
             api-testing \
             pytest tests/ -v --alluredir=allure-results
