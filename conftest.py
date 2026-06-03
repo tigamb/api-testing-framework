@@ -16,6 +16,10 @@ _session_start: float = 0.0
 def pytest_sessionstart(session):
     global _session_start
     _session_start = time.time()
+    # pytest-html-reporter 0.2.9 reads _sessionstarttime which was removed in pytest 9.x
+    reporter = session.config.pluginmanager.get_plugin("terminalreporter")
+    if reporter is not None:
+        reporter._sessionstarttime = _session_start
 
 
 @pytest.fixture
@@ -52,7 +56,7 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
 
 
 def pytest_sessionfinish(session, exitstatus):
-    report_path = "report.html"
+    report_path = os.path.join("report", "pytest_html_report.html")
 
     if os.path.exists(report_path):
         s3_url = upload_report_to_s3(report_path)
