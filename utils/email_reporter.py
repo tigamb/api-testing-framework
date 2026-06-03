@@ -5,7 +5,7 @@ from datetime import datetime
 from config.logger import logger
 
 
-def send_test_report(report_path: str):
+def send_test_report(report_path: str, s3_url: str = None):
     sender_email = os.getenv("EMAIL_SENDER")
     receiver_email = os.getenv("EMAIL_RECEIVER")
     email_password = os.getenv("EMAIL_PASSWORD")
@@ -16,13 +16,14 @@ def send_test_report(report_path: str):
 
     subject = f"דוח בדיקות API – {datetime.now().strftime('%d/%m/%Y %H:%M')}"
 
-    body = """
+    s3_line = f"\nקישור לדוח ב־S3:\n{s3_url}" if s3_url else ""
+
+    body = f"""
     שלום,
-    
+
     מצורף דוח הבדיקות האוטומטיות האחרון.
-    
-    לפרטים נוספים ראה את הקובץ המצורף.
-    
+    {s3_line}
+
     בברכה,
     API Testing Framework
     """

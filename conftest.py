@@ -2,9 +2,12 @@
 
 import pytest
 import os
+import time
 from clients.api_client import APIClient
-from config.settings import REQRES_URL, SEND_EMAIL_REPORT
+from config.settings import REQRES_URL
 from utils.email_reporter import send_test_report
+from utils.s3_reporter import upload_report_to_s3
+from utils.cloudwatch_reporter import send_test_metrics
 
 
 @pytest.fixture
@@ -31,9 +34,22 @@ def authenticated_client():
     yield client
 
 
+def pytest_terminal_summary(terminalreporter, exitstatus, config):
+    stats = terminalreporter.stats
+    passed  = len(stats.get("passed",  []))
+    failed  = len(stats.get("failed",  []))
+    errors  = len(stats.get("error",   []))
+    duration = time.time() - terminalreporter._sessionstarttime
+    send_test_metrics(passed, failed, errors, duration)
+
+
 def pytest_sessionfinish(session, exitstatus):
-    if not SEND_EMAIL_REPORT:
-        return
     report_path = "report.html"
+
     if os.path.exists(report_path):
-        send_test_report(report_path)
+        s3_url = upload_report_to_s3(report_path)
+
+        if s3_url:
+            send_test_report(report_path, s3_url)
+        else:
+            send_test_report(report_path)
