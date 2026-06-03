@@ -8,6 +8,7 @@ from config.settings import (
     AWS_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY,
     AWS_REGION,
+    SEND_CLOUDWATCH_METRICS,
     CLOUDWATCH_NAMESPACE,
 )
 
@@ -19,6 +20,9 @@ def send_test_metrics(passed: int, failed: int, errors: int, duration: float) ->
     מדדים:
       TestsPassed, TestsFailed, TestsErrors, TestsTotal, TestsDuration
     """
+    if not SEND_CLOUDWATCH_METRICS:
+        return
+
     if not all([AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, CLOUDWATCH_NAMESPACE]):
         logger.warning("פרטי CloudWatch חסרים ב-.env — מדדים לא נשלחו")
         return

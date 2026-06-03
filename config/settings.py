@@ -28,6 +28,7 @@ AWS_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
 AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
 
 # CloudWatch — מדדי בדיקות (שלב 30)
+SEND_CLOUDWATCH_METRICS = os.getenv("SEND_CLOUDWATCH_METRICS", "false").lower() == "true"
 CLOUDWATCH_NAMESPACE = os.getenv("CLOUDWATCH_NAMESPACE", "API-Testing")
 
 # EC2 — הרצת בדיקות בענן (שלב 29)
