@@ -10,6 +10,14 @@ from utils.s3_reporter import upload_report_to_s3
 from utils.cloudwatch_reporter import send_test_metrics
 
 
+_session_start: float = 0.0
+
+
+def pytest_sessionstart(session):
+    global _session_start
+    _session_start = time.time()
+
+
 @pytest.fixture
 def api_client():
     client = APIClient()
@@ -39,7 +47,7 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
     passed  = len(stats.get("passed",  []))
     failed  = len(stats.get("failed",  []))
     errors  = len(stats.get("error",   []))
-    duration = time.time() - terminalreporter._sessionstarttime
+    duration = time.time() - _session_start
     send_test_metrics(passed, failed, errors, duration)
 
 
