@@ -2,6 +2,7 @@
 
 import boto3
 import os
+from botocore.config import Config
 from datetime import datetime
 from config.logger import logger
 from config.settings import (
@@ -26,7 +27,8 @@ def upload_report_to_s3(report_path: str):
             "s3",
             aws_access_key_id=AWS_ACCESS_KEY_ID,
             aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-            region_name=AWS_REGION
+            region_name=AWS_REGION,
+            config=Config(signature_version="s3v4")
         )
 
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -40,9 +42,15 @@ def upload_report_to_s3(report_path: str):
             ExtraArgs={"ContentType": "text/html"}
         )
 
-        url = f"https://{AWS_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{s3_key}"
-        logger.info(f"דוח הועלה בהצלחה ל־S3: {url}")
-        return url
+        presigned_url = s3_client.generate_presigned_url(
+            "get_object",
+            Params={"Bucket": AWS_BUCKET_NAME, "Key": s3_key},
+            ExpiresIn=3600
+        )
+
+        logger.info(f"דוח הועלה בהצלחה ל־S3")
+        logger.info(f"קישור זמני (תקף שעה): {presigned_url}")
+        return presigned_url
 
     except Exception as e:
         logger.error(f"שגיאה בהעלאה ל־S3: {e}")
